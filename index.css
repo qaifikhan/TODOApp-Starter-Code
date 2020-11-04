@@ -32,11 +32,8 @@ body {
     font-size: 24px;
     border: none;
     border-bottom: 1px solid blue;
+    outline: none;
     /* outline: none; */
-}
-
-.input-field::placeholder {
-    color: blue;
 }
 
 .todo-item {

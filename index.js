@@ -2,41 +2,8 @@ var inputField = document.getElementById('todo-input-field');
 
 var todoList = document.getElementById('todo-list');
 
-function getTODOsFromLocalStorage() {
-    var todoListStorage = localStorage.getItem('todo-list');
-    if(todoListStorage === null) {
-        todoListStorage = [];
-    } else {
-        todoListStorage = JSON.parse(todoListStorage);
-    }
-    console.log(todoListStorage);
 
-    return todoListStorage;
-}
-
-function renderTODOFromStorage(message, id) {
-    if(message) {
-        var newCard = createTODOCard(message, id);
-        var firstElem = todoList.firstElementChild;
-        todoList.insertBefore(newCard, firstElem);
-    } else {
-        alert('TODO cannot be empty!!');
-    }
-}
-
-function renderTODOsFromLocalStorage() {
-    var todoListFromStorage = getTODOsFromLocalStorage();
-    if(todoListFromStorage !== []) {
-        for(var i=0; i<todoListFromStorage.length; i++) {
-            console.log(todoListFromStorage[i]);
-            renderTODOFromStorage(todoListFromStorage[i].message, todoListFromStorage[i].id);
-        }
-    }
-}
-
-renderTODOsFromLocalStorage();
-
-function createTODOCard(msg, id) {
+function createTODOCard(msg) {
 //     <div id="first-elem" class="todo-item">
 //     <div class="horizontal-align todo-message-container">
 //         <h3 class="todo-message">Buy Apples</h3>
@@ -54,7 +21,6 @@ function createTODOCard(msg, id) {
 
     var mainCard = document.createElement('div');
     mainCard.className = 'todo-item';
-    mainCard.id = id;
 
     var messageContainer = document.createElement('div');
     messageContainer.className = 'horizontal-align todo-message-container';
@@ -66,81 +32,20 @@ function createTODOCard(msg, id) {
 
     var buttonWrapper = document.createElement('div');
 
-    var editIcon = document.createElement('i');
-    editIcon.className = 'fas fa-edit';
-    editIcon.onclick = function() {
-        var messageDiv = document.querySelector('#' + mainCard.id + ' .todo-message-container');
-        messageDiv.style.display = 'none';
-        var editDiv = document.querySelector('#' + mainCard.id + ' .todo-edit-container')
-        editDiv.style.display = 'block';
-    }
-    buttonWrapper.appendChild(editIcon);
-
     var deleteIcon = document.createElement('i');
     deleteIcon.className = 'fas fa-trash-alt';
-    deleteIcon.onclick = function() {
-        // alert('Delete Icon was clicked for Element with ID => ' +  mainCard.id);
-
-        var selectedElem = document.getElementById(mainCard.id);
-        selectedElem.remove();
-    }
     buttonWrapper.appendChild(deleteIcon);
     messageContainer.appendChild(buttonWrapper);
 
     mainCard.appendChild(messageContainer);
-
-    var editTODOContainer = document.createElement('div');
-    editTODOContainer.className = 'horizontal-align todo-edit-container';
-
-    // <input class="edit-todo" type="text" placeholder="TODO Here" />
-    var editTODOField = document.createElement('input');
-    editTODOField.className = 'edit-todo';
-    editTODOField.type = 'text';
-    editTODOField.placeholder = 'TODO Here';
-    editTODOField.value = msg;
-    editTODOContainer.appendChild(editTODOField);
-
-    // <button>Update</button>
-    var updateTODOBtn = document.createElement('button');
-    updateTODOBtn.innerHTML = 'Update';
-    editTODOContainer.appendChild(updateTODOBtn);
-    var closeTODOBtn = document.createElement('button');
-    closeTODOBtn.innerHTML = 'Close';
-    closeTODOBtn.onclick = function() {
-        var messageDiv = document.querySelector('#' + mainCard.id + ' .todo-message-container');
-        messageDiv.style.display = 'flex';
-        var editDiv = document.querySelector('#' + mainCard.id + ' .todo-edit-container')
-        editDiv.style.display = 'none';   
-    }
-    editTODOContainer.appendChild(closeTODOBtn);
-
-    mainCard.appendChild(editTODOContainer);
-
     return mainCard;
 }
 
 function handleTODOCreation() {
-    var message = inputField.value;
-    if(message) {
-        var todoListFromLocalStorage = getTODOsFromLocalStorage();
-        var id = 'todo' + (todoListFromLocalStorage.length + 1);
-
-        var newCard = createTODOCard(message, id);
-        var firstElem = todoList.firstElementChild;
-        todoList.insertBefore(newCard, firstElem);
-        inputField.value = '';
-
-        var todoObj = {
-            id: newCard.id,
-            message: message
-        }
-
-        var todoListStorage = getTODOsFromLocalStorage();
-        todoListStorage.push(todoObj);
-        localStorage.setItem('todo-list', JSON.stringify(todoListStorage));
-    } else {
-        alert('TODO cannot be empty!!');
-    }
+    // TASKs:
+    // 1.) Add card to the todo list on screen
+    // 2.) On successful addition empty the input box
+    // 3.) On delete click remove the TODO item
 }
 
 inputField.onkeyup = function(e) {
